@@ -821,14 +821,14 @@ namespace Csg
 		public Vertex GetVertex(Vertex sourcevertex)
 		{
 			var elements = new[] { sourcevertex.Pos.X, sourcevertex.Pos.Y, sourcevertex.Pos.Z };
-			var result = vertexfactory.LookupOrCreate(elements, els => sourcevertex);
+			var result = vertexfactory.LookupOrCreate(elements, sourcevertex);
 			return result;
 		}
 
 		public Plane GetPlane(Plane sourceplane)
 		{
 			var elements = new[] { sourceplane.Normal.X, sourceplane.Normal.Y, sourceplane.Normal.Z, sourceplane.W };
-			var result = planefactory.LookupOrCreate(elements, els => sourceplane);
+			var result = planefactory.LookupOrCreate(elements, sourceplane);
 			return result;
 		}
 
@@ -888,7 +888,7 @@ namespace Csg
 		{
 			multiplier = 1.0 / tolerance;
 		}
-		public T LookupOrCreate(double[] els, Func<double[], T> creatorCallback)
+		public T LookupOrCreate(double[] els, T creatorValue)
 		{
 			var hash = "";
 			foreach (var el in els)
@@ -902,7 +902,7 @@ namespace Csg
 				return result;
 			}
 			else {
-				result = creatorCallback(els);
+				result = creatorValue;
 				var hashparts = els.Select(el => {
 					var q0 = Math.Floor(el * multiplier);
 					var q1 = q0 + 1;
