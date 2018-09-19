@@ -173,7 +173,7 @@ namespace Csg
 					newvertices.Add(newvertex);
 				}
 				if (ismirror) newvertices.Reverse();
-				newpolygons.Add(new Polygon(newvertices, p.Shared, newplane));
+				newpolygons.Add(new Polygon(newvertices, p.userData, p.Shared, newplane));
 			}
 			var result = Solid.FromPolygons(newpolygons);
 			result.Properties = this.Properties.Transform(matrix4x4);
@@ -337,6 +337,7 @@ namespace Csg
 			{
 				var plane = sourcepolygons[0].Plane;
 				var shared = sourcepolygons[0].Shared;
+				var userData = sourcepolygons[0].userData;
 				var orthobasis = new OrthoNormalBasis(plane);
 				var polygonvertices2d = new List<List<Vector2D>>(); // array of array of CSG.Vector2D
 				var polygontopvertexindexes = new List<int>(); // array of indexes of topmost vertex per polygon
@@ -678,7 +679,7 @@ namespace Csg
 										var vertex3d = new Vertex(point3d);
 										vertices3d.Add(vertex3d);
 									}
-									var polygon = new Polygon(vertices3d, shared, plane);
+									var polygon = new Polygon(vertices3d, userData, shared, plane);
 									destpolygons.Add(polygon);
 								}
 							}
@@ -862,7 +863,7 @@ namespace Csg
 			{
 				newvertices_dedup = new List<Vertex>();
 			}
-			return new Polygon(newvertices_dedup, newshared, newplane);
+			return new Polygon(newvertices_dedup, sourcepolygon.userData, newshared, newplane);
 		}
 
 		public Solid GetCsg(Solid sourcecsg)

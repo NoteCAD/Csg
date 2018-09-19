@@ -8,6 +8,7 @@ namespace Csg
 		public readonly List<Vertex> Vertices;
 		public readonly Plane Plane;
 		public readonly PolygonShared Shared;
+		public object userData;
 
 		readonly bool debug = false;
 
@@ -16,9 +17,10 @@ namespace Csg
 		BoundingSphere cachedBoundingSphere;
 		BoundingBox cachedBoundingBox;
 
-		public Polygon(List<Vertex> vertices, PolygonShared shared = null, Plane plane = null)
+		public Polygon(List<Vertex> vertices, object ud, PolygonShared shared = null, Plane plane = null)
 		{
 			Vertices = vertices;
+			userData = ud;
 			Shared = shared ?? defaultShared;
 			Plane = plane ?? Plane.FromVector3Ds(vertices[0].Pos, vertices[1].Pos, vertices[2].Pos);
 			if (debug)
@@ -28,7 +30,7 @@ namespace Csg
 		}
 
 		public Polygon(params Vertex[] vertices)
-			: this(new List<Vertex>(vertices))
+			: this(new List<Vertex>(vertices), -1)
 		{
 		}
 
@@ -86,7 +88,7 @@ namespace Csg
 			}
 			newvertices.Reverse();
 			var newplane = Plane.Flipped();
-			return new Polygon(newvertices, Shared, newplane);
+			return new Polygon(newvertices, userData, Shared, newplane);
 		}
 	}
 
@@ -315,11 +317,11 @@ namespace Csg
 					}
 					if (frontvertices.Count >= 3)
 					{
-						result.Front = new Polygon(frontvertices, polygon.Shared, polygon.Plane);
+						result.Front = new Polygon(frontvertices, polygon.userData, polygon.Shared, polygon.Plane);
 					}
 					if (backvertices.Count >= 3)
 					{
-						result.Back = new Polygon(backvertices, polygon.Shared, polygon.Plane);
+						result.Back = new Polygon(backvertices, polygon.userData, polygon.Shared, polygon.Plane);
 					}
 				}
 			}

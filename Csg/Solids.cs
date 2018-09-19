@@ -24,7 +24,7 @@ namespace Csg
 							c.Z + r.Z * (2 * ((i & 4) != 0 ? 1 : 0) - 1));
 					return new Vertex(pos);
 				});
-				return new Polygon(vertices.ToList());
+				return new Polygon(vertices.ToList(), -1);
 			}).ToList());
 			return result;
 		}
@@ -100,7 +100,7 @@ namespace Csg
 								vertices.Add(new Vertex(center + (cylinderpoint * (cospitch) - (zvector * (sinpitch)))));
 							}
 							vertices.Add(new Vertex(center + (prevcylinderpoint * (cospitch) - (zvector * (sinpitch)))));
-							polygons.Add(new Polygon(vertices));
+							polygons.Add(new Polygon(vertices, -1));
 							vertices = new List<Vertex>();
 							vertices.Add(new Vertex(center + (prevcylinderpoint * (prevcospitch) + (zvector * (prevsinpitch)))));
 							vertices.Add(new Vertex(center + (cylinderpoint * (prevcospitch) + (zvector * (prevsinpitch)))));
@@ -110,7 +110,7 @@ namespace Csg
 							}
 							vertices.Add(new Vertex(center + (prevcylinderpoint * (cospitch) + (zvector * (sinpitch)))));
 							vertices.Reverse();
-							polygons.Add(new Polygon(vertices));
+							polygons.Add(new Polygon(vertices, -1));
 						}
 						prevcospitch = cospitch;
 						prevsinpitch = sinpitch;
