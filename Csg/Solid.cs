@@ -46,6 +46,20 @@ namespace Csg
 			return csgs[i - 1].Retesselated().Canonicalized();
 		}
 
+		public Solid Assembly(params Solid[] others)
+		{
+			var csgs = new List<Solid>();
+			csgs.Add(this);
+			csgs.AddRange(others);
+			var i = 1;
+			for (; i < csgs.Count; i += 2)
+			{
+				var n = csgs[i - 1].UnionForNonIntersecting(csgs[i]);
+				csgs.Add(n);
+			}
+			return csgs[i - 1].Retesselated().Canonicalized();
+		}
+
 		Solid UnionSub(Solid csg, bool retesselate, bool canonicalize)
 		{
 			if (!MayOverlap(csg))

@@ -232,6 +232,24 @@ namespace Csg
 			}
 		}
 
+		public static Solid Assembly(params Solid[] csgs)
+		{
+			if (csgs.Length == 0)
+			{
+				return new Solid();
+			}
+			else if (csgs.Length == 1)
+			{
+				return csgs[0];
+			}
+			else
+			{
+				var head = csgs[0];
+				var rest = csgs.Skip(1).ToArray();
+				return head.Assembly(rest);
+			}
+		}
+
 		public static Solid Difference(params Solid[] csgs)
 		{
 			if (csgs.Length == 0)
